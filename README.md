@@ -1,5 +1,5 @@
-# User-Activity-Log-Viewer-with-PostgreSQL
-Flask-based user activity log viewer demonstrating PostgreSQL B-tree indexing and query performance optimization.
+# User Activity Log Viewer using PostgreSQL
+A Flask-based user activity log viewer that demonstrates PostgreSQL B-tree indexing and query performance optimization.
 
 ## 1. Overview
 
@@ -24,7 +24,7 @@ Each operation is designed to demonstrate how PostgreSQL processes queries inter
 ## 3. System Requirements
 
 * Python 3.x
-* PostgreSQL 17
+* PostgreSQL 17 (tested)
 * pip (Python package manager)
 
 ---
@@ -140,7 +140,7 @@ Use the web interface to perform the following operations:
 
 ## 9. Database Design
 
-The database schema is defined in `schema.sql`, which creates the `activity_logs` table and the index.
+The database schema is defined in `schema.sql`, which creates the `activity_logs` table. The sample dataset is loaded through `seed.sql`.
 
 ### Table: activity_logs
 
@@ -179,9 +179,9 @@ This project demonstrates the relationship between application behavior and data
 
 ---
 
-## 11. Dataset
+## 11. Dataset & Analysis
 
-This project includes a small synthetic dataset provided in `seed.sql`.
+This project includes a small synthetic dataset generated and loaded through `seed.sql`. Additional SQL queries used for execution plan analysis are included in `analysis.sql`.
 
 ---
 
@@ -196,5 +196,5 @@ This project includes a small synthetic dataset provided in `seed.sql`.
 
 ## 13. Author
 
-Leia Kim
+Leia Kim  
 USC Applied Data Science
