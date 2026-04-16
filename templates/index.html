@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Activity Log Viewer</title>
+</head>
+<body>
+
+<h1>User Activity Log Viewer</h1>
+
+<h2>Operation 1: Recent Logs</h2>
+<form method="POST">
+    <input type="hidden" name="action" value="search_recent">
+    User ID: <input type="text" name="user_id">
+    <button type="submit">Search</button>
+</form>
+
+{% if logs %}
+<table border="1">
+<tr>
+<th>ID</th><th>User</th><th>Action</th><th>Resource</th><th>Time</th><th>Metadata</th>
+</tr>
+{% for log in logs %}
+<tr>
+<td>{{ log[0] }}</td>
+<td>{{ log[1] }}</td>
+<td>{{ log[2] }}</td>
+<td>{{ log[3] }}</td>
+<td>{{ log[4] }}</td>
+<td>{{ log[5] }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+<hr>
+
+<h2>Operation 2: Time Range</h2>
+<form method="POST">
+    <input type="hidden" name="action" value="search_range">
+    User ID: <input type="text" name="user_id">
+    Days: <input type="text" name="days" value="90">
+    <button type="submit">Search</button>
+</form>
+
+{% if filtered_logs %}
+<table border="1">
+<tr>
+<th>ID</th><th>User</th><th>Action</th><th>Resource</th><th>Time</th><th>Metadata</th>
+</tr>
+{% for log in filtered_logs %}
+<tr>
+<td>{{ log[0] }}</td>
+<td>{{ log[1] }}</td>
+<td>{{ log[2] }}</td>
+<td>{{ log[3] }}</td>
+<td>{{ log[4] }}</td>
+<td>{{ log[5] }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+<hr>
+
+<h2>Operation 3: Insert Log</h2>
+<form method="POST">
+    <input type="hidden" name="action" value="insert_log">
+    User ID: <input type="text" name="insert_user_id"><br>
+    Action: <input type="text" name="action_type"><br>
+    Resource: <input type="text" name="resource"><br>
+    Metadata: <input type="text" name="metadata"><br>
+    <button type="submit">Insert</button>
+</form>
+
+{% if inserted_message %}
+<p>{{ inserted_message }}</p>
+{% endif %}
+
+</body>
+</html>
