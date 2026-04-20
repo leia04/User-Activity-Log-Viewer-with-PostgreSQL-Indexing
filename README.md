@@ -70,25 +70,33 @@ psql activity_app -f seed.sql
 
 ---
 
-## 6. Environment Variables (Optional)
+## 6. **Environment Variables**
 
-If your PostgreSQL username is different, set environment variables:
+Before running the application, you must set the following environment variables:
 
 ```bash
 export DB_NAME=activity_app
 export DB_USER=your_postgres_username
 export DB_HOST=localhost
+export DB_PORT=5432
 ```
 
-For example:
+- `DB_USER` must match your local PostgreSQL role name.
+- You can check your PostgreSQL username by running:
 
 ```bash
-export DB_USER=leia
+psql -d activity_app
 ```
 
-If not set, default values will be used.
+Then inside psql:
 
----
+```sql
+SELECT current_user;
+```
+
+⚠️ If these variables are not set correctly, the application will fail to connect to the database.
+
+--
 
 ## 7. Running the Application
 
