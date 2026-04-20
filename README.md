@@ -181,7 +181,56 @@ This project demonstrates the relationship between application behavior and data
 
 ## 11. Dataset & Analysis
 
-This project includes a small synthetic dataset generated and loaded through `seed.sql`. Additional SQL queries used for execution plan analysis are included in `analysis.sql`.
+This project provides two options for setting up the dataset.
+
+
+### Option A (Recommended): Reproducible Dataset using seed.sql
+
+For full reproducibility, the dataset can be generated using a fixed random seed.
+
+```bash
+psql activity_app -f seed.sql
+```
+
+This approach ensures that the same dataset is consistently generated across different environments, allowing stable comparison of query execution plans and performance.
+
+---
+
+### Option B: Import Pre-generated Dataset (CSV)
+
+Alternatively, you can load a pre-generated dataset from `activity_logs.csv`.
+
+#### Step 1: Create table
+
+```sql
+CREATE TABLE activity_logs (
+  id SERIAL PRIMARY KEY,
+  user_id INT,
+  action_type TEXT,
+  resource TEXT,
+  ts TIMESTAMP,
+  metadata TEXT
+);
+```
+
+#### Step 2: Import CSV
+
+```sql
+\copy activity_logs FROM 'activity_logs.csv' CSV HEADER
+```
+
+#### Step 3 (Recommended): Reset sequence after import
+
+```sql
+SELECT setval('activity_logs_id_seq', (SELECT MAX(id) FROM activity_logs));
+```
+
+This option allows faster setup without regenerating the dataset.
+
+
+### SQL Analysis
+
+Detailed SQL queries used for execution plan analysis and performance comparison are provided in `analysis.sql`.
 
 ---
 
