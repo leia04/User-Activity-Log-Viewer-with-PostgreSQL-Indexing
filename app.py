@@ -5,10 +5,19 @@ import os
 app = Flask(__name__)
 
 def get_connection():
+    db_name = os.getenv("DB_NAME", "activity_app")
+    db_user = os.getenv("DB_USER")
+    db_host = os.getenv("DB_HOST", "localhost")
+    db_port = os.getenv("DB_PORT", "5432")
+
+    if not db_user:
+        raise RuntimeError("DB_USER environment variable is not set.")
+
     return psycopg2.connect(
-        dbname=os.getenv("DB_NAME", "activity_app"),
-        user=os.getenv("DB_USER", "postgres"),
-        host=os.getenv("DB_HOST", "localhost")
+        dbname=db_name,
+        user=db_user,
+        host=db_host,
+        port=db_port
     )
 
 
@@ -90,4 +99,3 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True)
-    
