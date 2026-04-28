@@ -49,7 +49,6 @@ If PostgreSQL is not running:
 pg_ctl -D /opt/homebrew/var/postgresql@17 start
 ```
 
-
 ### Step 2: Create database
 
 ```bash
@@ -58,24 +57,39 @@ createdb activity_app
 
 ### Step 3: Load schema
 
+Create the `activity_logs` table and the composite B-tree index by running:
+
 ```bash
 psql activity_app -f schema.sql
 ```
 
 ### Step 4: Load dataset
+
 You can load the dataset using one of the following options.
 
-##### Option A: Load the activity_logs.csv dataset
+#### Option A: Load the pre-generated CSV dataset
+
+Open PostgreSQL:
+
 ```bash
 psql -d activity_app
+```
+
+Then run the following commands inside PostgreSQL:
+
+```sql
 \copy activity_logs FROM 'activity_logs.csv' CSV HEADER
 SELECT setval('activity_logs_id_seq', (SELECT MAX(id) FROM activity_logs));
 ```
 
-##### Option B: Generate and load the reproducible synthetic dataset
+#### Option B: Generate and load the reproducible synthetic dataset
+
+Alternatively, you can generate and load the synthetic dataset using `seed.sql`:
+
 ```bash
 psql activity_app -f seed.sql
 ```
+
 ---
 
 
@@ -157,7 +171,7 @@ Use the web interface to perform the following operations:
 
 ## 9. Database Design
 
-The database schema is defined in `schema.sql`, which creates the `activity_logs` table. The sample dataset is loaded through `seed.sql`.
+The database schema is defined in `schema.sql`, which creates the `activity_logs` table and the composite B-tree index. The dataset can be loaded either from `activity_logs.csv` or generated using `seed.sql`.
 
 ### Table: activity_logs
 
@@ -198,41 +212,25 @@ This project demonstrates the relationship between application behavior and data
 
 ## 11. Dataset & Analysis
 
-This project provides two options for setting up the dataset.
+This project provides two options for setting up the dataset, as described in the Database Setup section.
 
 ### Option A: Import Pre-generated Dataset (CSV)
 
+The repository includes a pre-generated dataset file, `activity_logs.csv`. This option allows the project to be tested quickly without regenerating the dataset. After importing the CSV file, the `activity_logs_id_seq` sequence should be reset so that newly inserted records receive an `id` value greater than the existing maximum `id`.
+
 ### Option B (Recommended): Reproducible Dataset using seed.sql
 
-For full reproducibility, the dataset can be generated using a fixed random seed.
-
-```bash
-psql activity_app -f seed.sql
-```
-
-This approach ensures that the same dataset is consistently generated across different environments, allowing stable comparison of query execution plans and performance.
-Alternatively, you can load a pre-generated dataset from `activity_logs.csv`.
-
----
-
-#### Step 2: Import CSV
-
-```sql
-\copy activity_logs FROM 'activity_logs.csv' CSV HEADER
-```
-
-#### Step 3 (Recommended): Reset sequence after import
-
-```sql
-SELECT setval('activity_logs_id_seq', (SELECT MAX(id) FROM activity_logs));
-```
-
-This option allows faster setup without regenerating the dataset.
-
+For full reproducibility, the dataset can be generated using `seed.sql` with a fixed random seed. This approach ensures that the same dataset is consistently generated across different environments, allowing stable comparison of query execution plans and performance.
 
 ### SQL Analysis
 
 Detailed SQL queries used for execution plan analysis and performance comparison are provided in `analysis.sql`.
+
+To reproduce the query execution plan analysis, run:
+
+```bash
+psql activity_app -f analysis.sql
+```
 
 ---
 
