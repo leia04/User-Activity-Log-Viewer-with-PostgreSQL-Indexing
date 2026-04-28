@@ -62,13 +62,22 @@ createdb activity_app
 psql activity_app -f schema.sql
 ```
 
-### Step 4: Load sample data
+### Step 4: Load dataset
+You can load the dataset using one of the following options.
 
+##### Option A: Load the activity_logs.csv dataset
+```bash
+psql -d activity_app
+\copy activity_logs FROM 'activity_logs.csv' CSV HEADER
+SELECT setval('activity_logs_id_seq', (SELECT MAX(id) FROM activity_logs));
+```
+
+##### Option B: Generate and load the reproducible synthetic dataset
 ```bash
 psql activity_app -f seed.sql
 ```
-
 ---
+
 
 ## 6. **Environment Variables**
 
@@ -191,8 +200,9 @@ This project demonstrates the relationship between application behavior and data
 
 This project provides two options for setting up the dataset.
 
+### Option A: Import Pre-generated Dataset (CSV)
 
-### Option A (Recommended): Reproducible Dataset using seed.sql
+### Option B (Recommended): Reproducible Dataset using seed.sql
 
 For full reproducibility, the dataset can be generated using a fixed random seed.
 
@@ -201,25 +211,9 @@ psql activity_app -f seed.sql
 ```
 
 This approach ensures that the same dataset is consistently generated across different environments, allowing stable comparison of query execution plans and performance.
-
----
-
-### Option B: Import Pre-generated Dataset (CSV)
-
 Alternatively, you can load a pre-generated dataset from `activity_logs.csv`.
 
-#### Step 1: Create table
-
-```sql
-CREATE TABLE activity_logs (
-  id SERIAL PRIMARY KEY,
-  user_id INT,
-  action_type TEXT,
-  resource TEXT,
-  ts TIMESTAMP,
-  metadata TEXT
-);
-```
+---
 
 #### Step 2: Import CSV
 
